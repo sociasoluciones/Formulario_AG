@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario uContact</title>
+  <link rel="stylesheet" href="style.css">
+  </head>
+<body>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <a href="#" class="active" onclick="showTab('gestion')">Gestión</a>
+    <a href="#" onclick="showTab('comercial')">Comercial</a>
+    <a href="#" onclick="showTab('taller')">Taller</a>
+    <a href="#" onclick="showTab('repuestos')">Repuestos</a>
+    <a href="#" onclick="showTab('tratamiento')">Tratamiento datos</a>
+    <a href="#" onclick="showTab('tips')">Tips</a>
+    <a href="#" onclick="showTab('postventa')">Campañas postventa</a>
+    <a href="#" onclick="showTab('comercial_campanas')">Campañas comercial</a>
+  </div>
+
+  <!-- Formulario Gestión -->
+  <div class="form-section active" id="gestion">
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 30px;">
+      <!-- Columna izquierda -->
+      <div style="flex: 1;">
+        <!-- DATOS PERSONALES -->
+        <div class="section-box">
+          <div class="section-header">
+            <i class="fas fa-id-card"></i>
+            <span>Datos personales</span>
+          </div>
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label>Tipo de documento</label>
+              <select id="tipoDocumento" name="tipoDocumento">
+                <option value="" disabled selected>Seleccione una opción</option>
+                <option value="cc">Cédula de ciudadanía</option>
+                <option value="ce">Cédula de extranjería</option>
+                <option value="ti">Tarjeta de identidad</option>
+                <option value="pasaporte">Pasaporte</option>
+                <option value="pasaporte">NIT</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Documento</label>
+              <div class="form-group-inline">
+                <input type="text" id="documento" name="documento">
+                
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Celular</label>
+              <div class="form-group-inline">
+                <input type="text" name="celular" id="celular">
+               
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label>Correo</label>
+              <div class="form-group-inline">
+                <input type="text" name="correo" id="correo">
+                
+              </div>
+            </div>
+
+            <div class="form-group"><label>Nombre</label><input type="text" name="nombre"></div>
+            <div class="form-group"><label>Primer apellido</label><input type="text" name="primerApellido"></div>
+            <div class="form-group"><label>Segundo apellido</label><input type="text" name="segundoApellido"></div>
+            <div class="form-group"><label>Fecha nacimiento</label><input type="date" name="fechaNacimiento"></div>
+
+            <div class="form-group">
+              <label>Género</label>
+              <select name="genero">
+                <option disabled selected>Seleccione</option>
+                <option>Hombre</option>
+                <option>Mujer</option>
+                <option>Otro</option>
+              </select>
+            </div>
+
+            <div class="form-group"><label>Dirección</label><input type="text" name="direccion"></div>
+          </div>
+        </div>
+
+        <!-- VEHÍCULO -->
+        <div class="section-box">
+          <div class="section-header">
+            <i class="fas fa-car"></i>
+            <span>Vehículo</span>
+          </div>
+          <div class="form-grid">
+            <div class="form-group"><label>Placa</label>
+              <div class="form-group-inline">
+                <input type="text" name="placa">
+                <button class="search-button">Buscar</button>
+              </div>
+            </div>
+            <div class="form-group"><label>Fecha Entrega</label><input type="text" name="fecha_entrega"></div>
+            <div class="form-group"><label>Chasis</label><input type="text" name="chasis"></div>
+            <div class="form-group"><label>Marca</label><input type="text" name="marca"></div>
+            <div class="form-group"><label>Familia</label><input type="text" name="familia"></div>
+            <div class="form-group"><label>Modelo</label><input type="text" name="modelo"></div>
+          </div>
+        </div>
+
+        <!-- ASESORES -->
+        <div class="section-box">
+          <div class="section-header">
+            <i class="fas fa-user-tie"></i>
+            <span>Asesores</span>
+          </div>
+          <div class="form-grid">
+            <div class="form-group"><label>Vendedor VN</label><input type="text" name="vendedorVN"></div>
+            <div class="form-group"><label>Vendedor VU</label><input type="text" name="vendedorVU"></div>
+            <div class="form-group"><label>Comprador</label><input type="text" name="comprador"></div>
+            <div class="form-group"><label>Recepcionista</label><input type="text" name="recepcionista"></div>
+            <div class="form-group"><label>Vendedor almacén</label><input type="text" name="vendedorAlmacen"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna derecha: acciones -->
+      <div class="actions-box">
+        <button id="btnBuscarCliente" class="btn-principal"><i class="fas fa-search"></i> Buscar cliente</button>
+        <button id="enviarFormulario"><i class="fas fa-save"></i> Guardar cliente</button>
+        <button id="btnCrearOportunidad"><i class="fas fa-plus-circle"></i> Crear Oportunidad</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pestaña Comercial -->
+  <div class="form-section" id="comercial">
+    <div class="section-box">
+      <div class="section-header">
+        <i class="fas fa-id-card"></i>
+        <span>Oportunidades</span>
+      </div>
+      <div class="contenedor-tabla-scroll">
+        <table class="tabla-comercial">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Vendedor</th>
+              <th>Nombre Oportunidad</th>
+              <th>Equipo/Sede</th>
+              <th>Etapa</th>
+              <th>Actividad</th>
+              <th>URL</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-oportunidades"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-box">
+      <div class="section-header">
+        <i class="fas fa-file-invoice-dollar"></i>
+        <span>Cotizaciones</span>
+      </div>
+      <div class="contenedor-tabla-scroll">
+        <table class="tabla-comercial">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Vendedor</th>
+              <th>Marca</th>
+              <th>Familia</th>
+              <th>Modelo</th>
+              <th>Equipo/Sede</th>
+              <th>Link cotización</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-cotizaciones"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-box">
+      <div class="section-header">
+        <i class="fas fa-receipt"></i>
+        <span>Facturas</span>
+      </div>
+      <div class="contenedor-tabla-scroll">
+        <table class="tabla-comercial">
+          <thead>
+            <tr>
+              <th>Placa</th>
+              <th>Fecha factura</th>
+              <th>Fecha matrícula</th>
+              <th>Fecha entrega</th>
+              <th>Vendedor</th>
+              <th>Marca</th>
+              <th>Familia</th>
+              <th>Modelo</th>
+              <th>Sede</th>
+              <th>Chasis</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-facturas"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Importar main.js como módulo -->
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
+

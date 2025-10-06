@@ -1,0 +1,519 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* General */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9fbfc;
+  padding: 0;
+  margin: 0;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  padding: 0 20px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border-bottom: 3px solid #e5e5e5;
+}
+
+.tabs a {
+  text-decoration: none;
+  padding: 18px 20px;
+  color: #333;
+  font-weight: 600;
+  border-bottom: 4px solid transparent;
+  transition: 0.2s;
+}
+
+.tabs a.active {
+  border-bottom: 4px solid #c2f200;
+  color: #0c3c3c;
+}
+
+/* Secciones */
+.form-section {
+  display: none;
+  padding: 30px 40px;
+}
+
+.form-section.active {
+  display: block;
+}
+
+/* Contenedor de cada sección (blanco) */
+.section-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Encabezado de cada sección (verde claro) */
+.section-header {
+  display: flex;
+  align-items: center;
+  background: #e7f2f4;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #0a5555;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.section-header i {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+/* Campos */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px 24px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #cfdedf;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Input + botón (Buscar) */
+.form-group-inline {
+  display: flex;
+}
+
+.form-group-inline input {
+  flex: 1;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.search-button {
+  padding: 8px 12px;
+  background-color: #007d80;
+  color: white;
+  border: none;
+  border-left: none;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  cursor: pointer;
+}
+
+/* Botones de acción a la derecha */
+.actions-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  margin-left: 30px;
+  height: fit-content;
+  min-width: 420px;
+}
+
+.actions-box button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 18px;
+  background: #007d80;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  border-radius: 999px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+  gap: 8px;
+}
+
+.actions-box button:hover {
+  background: #005c5f;
+  transform: scale(1.01);
+}
+
+/* Pestaña Comercial */
+.contenedor-tabla-scroll {
+  max-height: 260px;
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid #dce9ec;
+}
+
+.tabla-comercial {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-comercial th,
+.tabla-comercial td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 13px;
+  color: #333;
+}
+
+.tabla-comercial th {
+  font-weight: bold;
+  color: #003e3e;
+  background-color: #f5fafa;
+}
+
+/* Modal Vehiculos */
+/* Fondo oscuro del modal */
+#modal-vehiculos {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Activar modal */
+#modal-vehiculos.active-modal {
+  display: flex;
+}
+
+/* Contenido del modal */
+.modal-content {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 900px;
+  width: 95%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Encabezado */
+.modal-content h3 {
+  font-size: 20px;
+  color: #0d4c47;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.modal-content h3::before {
+  content: '🚗';
+  font-size: 24px;
+}
+
+/* Botón cerrar */
+.modal-content .close {
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  color: #555;
+  cursor: pointer;
+}
+
+/* Tabla */
+.modal-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modal-content th,
+.modal-content td {
+  padding: 14px;
+  border-bottom: 1px solid #d4d4d4;
+  text-align: left;
+  font-size: 15px;
+}
+
+.modal-content th {
+  background-color: #f4f7f8;
+  color: #0d4c47;
+  font-weight: bold;
+}
+
+/* Botones */
+.modal-content .btn-select-vehiculo {
+  background-color: #1a8877;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content .btn-select-vehiculo:hover {
+  background-color: #146b5f;
+}
+
+
+
+/* Modal Crear Oportunidad */
+#modal-oportunidad {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#modal-oportunidad.active-modal {
+  display: flex;
+}
+
+#modal-oportunidad .modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  width: 95%;
+  max-width: 1100px;
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+}
+
+/* Encabezado */
+#modal-oportunidad h3 {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.8rem;
+  background: #e6f1f2;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #155d67;
+}
+
+/* Grid de formulario */
+#modal-oportunidad .form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Contenedor de cada input */
+#modal-oportunidad .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Etiquetas */
+#modal-oportunidad .form-group label {
+  font-weight: 600;
+  color: #165362;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+/* Inputs y Selects */
+#modal-oportunidad input,
+#modal-oportunidad select {
+  padding: 10px;
+  border: 1px solid #cbd5dc;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f9fafa;
+  min-height: 40px;
+  width: 100%;
+}
+
+/* Textarea de Comentario */
+#modal-oportunidad textarea {
+  grid-column: span 3;
+  min-height: 100px;
+  resize: vertical;
+  background-color: #f9fafa;
+  border: 1px solid #cbd5dc;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  width: 100%;
+}
+
+/* Enfocados */
+#modal-oportunidad input:focus,
+#modal-oportunidad select:focus,
+#modal-oportunidad textarea:focus {
+  border-color: #0a7c91;
+  background-color: #fff;
+  outline: none;
+}
+
+/* Pie de modal */
+#modal-oportunidad .modal-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+/* Botón principal */
+#modal-oportunidad .btn-primary {
+  background-color: #11616d;
+  color: white;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out;
+}
+
+#modal-oportunidad .btn-primary:hover {
+  background-color: #0e4c57;
+}
+
+/* Botón de cerrar */
+#modal-oportunidad .close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #555;
+}
+
+#modal-oportunidad .close:hover {
+  color: #c0392b;
+}
+
+#modal-oportunidad select[name="etiqueta"] {
+  display: block;
+  width: 100%;
+}
+
+/* Estilos para el select múltiple de etiquetas */
+#modal-oportunidad select[multiple] {
+  min-height: 100px;
+  padding: 8px;
+}
+
+#modal-oportunidad select[multiple] option {
+  padding: 6px 8px;
+  margin: 2px 0;
+  border-radius: 4px;
+}
+
+#modal-oportunidad select[multiple] option:hover {
+  background-color: #e7f2f4;
+}
+
+#modal-oportunidad select[multiple] option:checked {
+  background-color: #007d80;
+  color: white;
+}
+
+
+/* Estilos para el componente de tags */
+.tags-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.tags-input-container {
+  flex: 1;
+  position: relative;
+}
+
+.tags-search {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cbd5dc;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f9fafa;
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  flex: 2;
+  min-height: 40px;
+  align-items: center;
+}
+
+.tag-item {
+  background-color: #007d80;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 15px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tag-remove {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tags-dropdown {
+  position: absolute;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  z-index: 1000;
+  display: none;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  top: 100%;
+  left: 0;
+}
+
+.tags-dropdown.show {
+  display: block;
+}
+
+.tag-option {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.tag-option:hover {
+  background-color: #f0f0f0;
+}
