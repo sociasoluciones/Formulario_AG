@@ -1,0 +1,618 @@
+{
+  "name": "Formulario_AG_Opciones_Oportunidad",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "opciones_oportunidad",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -944,
+        752
+      ],
+      "id": "53fb237f-d4c5-489f-a39d-4fd226a3f863",
+      "name": "Webhook",
+      "webhookId": "102c7c17-df8f-4395-b694-bdb233e84644"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1280,
+        768
+      ],
+      "id": "92a5e391-2423-4c85-8306-40cb330a74cd",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "resource": "custom",
+        "customResource": "res.company",
+        "operation": "getAll",
+        "returnAll": true,
+        "options": {
+          "fieldsList": [
+            "id",
+            "name"
+          ]
+        },
+        "filterRequest": {
+          "filter": [
+            {
+              "fieldName": "active",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.odoo",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        304
+      ],
+      "id": "f85c1552-aef6-415a-910e-c013981bf759",
+      "name": "Companies",
+      "credentials": {
+        "odooApi": {
+          "id": "wbjJ4UWVcoGnrlnf",
+          "name": "Odoo account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "custom",
+        "customResource": "crm.team",
+        "operation": "getAll",
+        "returnAll": true,
+        "options": {
+          "fieldsList": [
+            "id",
+            "name"
+          ]
+        },
+        "filterRequest": {
+          "filter": [
+            {
+              "fieldName": "active",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.odoo",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        544
+      ],
+      "id": "a0591aa8-d514-4233-83fe-780526c8aa66",
+      "name": "Teams",
+      "credentials": {
+        "odooApi": {
+          "id": "wbjJ4UWVcoGnrlnf",
+          "name": "Odoo account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "custom",
+        "customResource": "res.users",
+        "operation": "getAll",
+        "returnAll": true,
+        "options": {
+          "fieldsList": [
+            "id",
+            "name"
+          ]
+        },
+        "filterRequest": {
+          "filter": [
+            {
+              "fieldName": "active",
+              "value": "true"
+            },
+            {
+              "fieldName": "sale_team_ids",
+              "operator": "notEqual",
+              "value": "salse"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.odoo",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        752
+      ],
+      "id": "8e74d1eb-eb8b-4dc6-929f-4b2cd50c14a2",
+      "name": "Users",
+      "credentials": {
+        "odooApi": {
+          "id": "wbjJ4UWVcoGnrlnf",
+          "name": "Odoo account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "custom",
+        "customResource": "utm.medium",
+        "operation": "getAll",
+        "returnAll": true,
+        "options": {
+          "fieldsList": [
+            "id",
+            "name"
+          ]
+        },
+        "filterRequest": {
+          "filter": [
+            {
+              "fieldName": "active",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.odoo",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        944
+      ],
+      "id": "1a5e8488-b2fb-419e-9fa1-a9af2446bdb4",
+      "name": "Medium",
+      "credentials": {
+        "odooApi": {
+          "id": "wbjJ4UWVcoGnrlnf",
+          "name": "Odoo account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "custom",
+        "customResource": "utm.source",
+        "operation": "getAll",
+        "returnAll": true,
+        "options": {
+          "fieldsList": [
+            "id",
+            "name"
+          ]
+        },
+        "filterRequest": {
+          "filter": [
+            {
+              "fieldName": "code",
+              "operator": "notEqual"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.odoo",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        1184
+      ],
+      "id": "2b05caad-f045-4927-8230-92816ca12673",
+      "name": "Source",
+      "credentials": {
+        "odooApi": {
+          "id": "wbjJ4UWVcoGnrlnf",
+          "name": "Odoo account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst respuesta = {\n  company_id: [],\n  user_id: [],\n  team_id: [],\n  medium_id: [],\n  source_id: [],\n  tag_id: []\n};\n\n// Clasificar por tipo\nitems.forEach(item => {\n  const tipo = item.json.tipo;\n  const id = item.json.id;\n  const name = item.json.name;\n  const pair = [id, name];\n\n  switch (tipo) {\n    case 'Companies':\n      respuesta.company_id.push(pair);\n      break;\n    case 'Users':\n      respuesta.user_id.push(pair);\n      break;\n    case 'Teams':\n      respuesta.team_id.push(pair);\n      break;\n    case 'Medium':\n      respuesta.medium_id.push(pair);\n      break;\n    case 'Source':\n      respuesta.source_id.push(pair);\n      break;\n    case 'Tag':\n      respuesta.tag_id.push(pair);\n      break;\n    default:\n      // O puedes lanzar error si quieres\n      console.warn(`Tipo no reconocido: ${tipo}`);\n  }\n});\n\nreturn [{ json: respuesta }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        768
+      ],
+      "id": "cef17f2a-8306-4a8b-b63f-34fffa7469f3",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "numberInputs": 6
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        464,
+        704
+      ],
+      "id": "d9b60023-58e4-4a83-a999-78a86f729463",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"id\": \"{{ $json.id }}\",\n  \"name\": \"{{ $json.name }}\",\n  \"tipo\": \"Companies\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        304
+      ],
+      "id": "b183e53a-e5c8-409a-bfe0-9545ff53ec48",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"id\": \"{{ $json.id }}\",\n  \"name\": \"{{ $json.name }}\",\n  \"tipo\": \"Teams\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        544
+      ],
+      "id": "793e290a-68d6-47fe-8241-d21bad76e4a4",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"id\": \"{{ $json.id }}\",\n  \"name\": \"{{ $json.name }}\",\n  \"tipo\": \"Users\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        752
+      ],
+      "id": "38ca635c-2637-40bc-bb73-045df6176a21",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"id\": \"{{ $json.id }}\",\n  \"name\": \"{{ $json.name }}\",\n  \"tipo\": \"Medium\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        944
+      ],
+      "id": "b87b2866-9d16-4fa2-af1c-6a8b24acce82",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"id\": \"{{ $json.id }}\",\n  \"name\": \"{{ $json.name }}\",\n  \"tipo\": \"Source\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        1184
+      ],
+      "id": "5c76694c-b7ad-42dd-ba5e-1a2f44f22abe",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const nameRaw = item.json.name || '';\n  const nameLimpio = String(nameRaw)\n    .replace(/\"/g, '\\\\\"')         // escapamos comillas dobles\n    .replace(/\\r?\\n|\\r/g, ' ')    // removemos saltos de línea\n    .replace(/:/g, '-')           // opcional: evitar ':' si da problemas\n\n  return {\n    json: {\n      ...item.json,\n      name: nameLimpio\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        768
+      ],
+      "id": "1c0a9dde-20e3-4bf6-8079-8ae68f3ade94",
+      "name": "Code4"
+    },
+    {
+      "parameters": {
+        "resource": "custom",
+        "customResource": "crm.tag",
+        "operation": "getAll",
+        "returnAll": true,
+        "options": {
+          "fieldsList": [
+            "name",
+            "id"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.odoo",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        1376
+      ],
+      "id": "37b06908-b0f5-480e-9efc-5cddb1206fbc",
+      "name": "Tags",
+      "credentials": {
+        "odooApi": {
+          "id": "wbjJ4UWVcoGnrlnf",
+          "name": "Odoo account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"id\": \"{{ $json.id }}\",\n  \"name\": \"{{ $json.name }}\",\n  \"tipo\": \"Tag\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        1376
+      ],
+      "id": "b874fb22-5ca6-4512-935e-7ab89f485ac4",
+      "name": "Edit Fields5"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "x-forwarded-for": "34.138.225.207",
+            "x-forwarded-proto": "https",
+            "x-forwarded-port": "443",
+            "host": "workflow.sociabpo.com",
+            "x-amzn-trace-id": "Root=1-68e3d548-1a5da3e93555459a08f1a924",
+            "content-length": "51",
+            "content-type": "application/json; charset=utf-8",
+            "accept-encoding": "gzip",
+            "user-agent": "okhttp/4.10.0"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "channel": "whatsapp",
+            "campaign": "AG_GENERAL_4940"
+          },
+          "webhookUrl": "https://workflow.sociabpo.com/webhook/opciones_oportunidad",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Companies",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Teams",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Users",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Medium",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Source",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Tags",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Companies": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Teams": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Users": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Medium": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Source": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tags": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "daba3bc5-850d-4008-8d16-d5fd7cae8924",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1cc18228b98a2342abfb569134beab1251c2dd05fbddc1b19981e658d8a5196a"
+  },
+  "id": "hyu4THXLQE2zYNJv",
+  "tags": []
+}

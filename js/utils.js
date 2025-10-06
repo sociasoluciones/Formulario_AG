@@ -221,6 +221,21 @@ export async function enviarFormulario() {
   }
 }
 
+// Función para detectar empresa según prefijo de campaña
+function detectarEmpresaDesdeCampana(campaign) {
+  if (!campaign) return null;
+
+  const campaignUpper = campaign.toUpperCase();
+
+  if (campaignUpper.startsWith('AG_')) {
+    return 'AGENCIAUTO';
+  } else if (campaignUpper.startsWith('MG_')) {
+    return 'MEGAUTO';
+  }
+
+  return null;
+}
+
 export async function mostrarModalOportunidad() {
   // Eliminar cualquier versión previa del modal
   const modalAnterior = document.getElementById('modal-oportunidad');
@@ -283,11 +298,69 @@ export async function mostrarModalOportunidad() {
 
     console.log("🔎 Extraídos de la interacción -> channel:", channel, "campaign:", campaign, "asesor:", asesorLogin );
 
-    const opcionesMapeadas = await cargarOpcionesOportunidad({ channel, campaign, asesorLogin });
+    // Detectar empresa desde la campaña
+    const empresaDetectada = detectarEmpresaDesdeCampana(campaign);
+    console.log("🏢 Empresa detectada desde campaña:", empresaDetectada);
+
+    // Cargar opciones iniciales pasando la empresa detectada
+    const opcionesMapeadas = await cargarOpcionesOportunidad({ channel, campaign, empresa: empresaDetectada });
     console.log("Opciones cargadas correctamente");
-    
+
     // Configurar el componente de tags
     setupTagsInput(modal, opcionesMapeadas.etiqueta);
+
+    // Pre-seleccionar empresa si fue detectada desde la campaña
+    const selectEmpresa = modal.querySelector('select[name="empresa"]');
+    if (selectEmpresa && empresaDetectada && opcionesMapeadas.empresa.length === 1) {
+      // Si solo hay una empresa disponible (filtrada por campaña), seleccionarla automáticamente
+      const empresaId = opcionesMapeadas.empresa[0].id;
+      selectEmpresa.value = empresaId;
+
+      // Cargar las opciones dependientes inmediatamente
+      console.log(`✅ Empresa pre-seleccionada: ${empresaDetectada} (ID: ${empresaId})`);
+
+      const opcionesConDependencias = await cargarOpcionesOportunidad({
+        channel,
+        campaign,
+        company_id: empresaId,
+        empresa: empresaDetectada
+      });
+
+      // Actualizar tags con las opciones de la empresa seleccionada
+      setupTagsInput(modal, opcionesConDependencias.etiqueta);
+    }
+
+    // Configurar evento onChange para el select de empresa
+    if (selectEmpresa) {
+      selectEmpresa.addEventListener('change', async (e) => {
+        const empresaSeleccionada = e.target.value;
+
+        if (!empresaSeleccionada) {
+          // Si se deselecciona la empresa, limpiar los demás campos
+          ['vendedor', 'equipo', 'media', 'origen'].forEach(campo => {
+            const select = modal.querySelector(`select[name="${campo}"]`);
+            if (select) {
+              select.innerHTML = '<option value="">Seleccione...</option>';
+            }
+          });
+          return;
+        }
+
+        console.log(`🔄 Empresa seleccionada: ${empresaSeleccionada}, recargando opciones...`);
+
+        // Recargar opciones filtradas por empresa
+        const nuevasOpciones = await cargarOpcionesOportunidad({
+          channel,
+          campaign,
+          company_id: empresaSeleccionada
+        });
+
+        // Actualizar el componente de tags con las nuevas etiquetas
+        setupTagsInput(modal, nuevasOpciones.etiqueta);
+
+        console.log("✅ Opciones actualizadas para la empresa seleccionada");
+      });
+    }
   } catch (error) {
     console.error("Error al cargar opciones:", error);
   }
@@ -479,13 +552,13 @@ function setupTagsInput(modal, opcionesEtiquetas) {
   renderOptions();
 }
 
-async function cargarOpcionesOportunidad({ channel = null, campaign = null } = {}) {
-  console.log("Iniciando carga de opciones de oportunidad...");
+async function cargarOpcionesOportunidad({ channel = null, campaign = null, company_id = null, empresa = null } = {}) {
+  console.log("Iniciando carga de opciones de oportunidad...", { channel, campaign, company_id, empresa });
   try {
     const res = await fetch('https://livecenter.ucontactcloud.com/api/webhook/api_workflow_sociabpo', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ metodo: "opciones_oportunidad", data: {channel, campaign} })
+      body: JSON.stringify({ metodo: "opciones_oportunidad", data: { channel, campaign, company_id, empresa } })
     });
 
     if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
@@ -517,11 +590,19 @@ async function cargarOpcionesOportunidad({ channel = null, campaign = null } = {
       const select = modal.querySelector(`select[name="${campo}"]`);
       if (!select) return;
 
+      // Para empresa, mantener la selección actual
+      const valorActual = select.value;
+
       select.innerHTML = '<option value="">Seleccione...</option>';
       opcionesMapeadas[campo].forEach(opt => {
         const option = new Option(opt.nombre, opt.id);
         select.add(option);
       });
+
+      // Restaurar selección de empresa si existe
+      if (campo === 'empresa' && valorActual) {
+        select.value = valorActual;
+      }
     });
 
     return opcionesMapeadas;

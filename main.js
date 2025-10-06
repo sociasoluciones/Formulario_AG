@@ -1,7 +1,7 @@
 // main.js
 
 import FormManager from './js/formManager';
-import { 
+import {
   showTab,
   cargarDatosComerciales,
   enviarFormulario,
@@ -10,7 +10,11 @@ import {
 } from './utils';
 
 import { buscarCliente } from './utils/config.js';
+import { setupMockApi } from './utils/mockData.js';
 import './style.css';
+
+// Configurar mocks para desarrollo local
+setupMockApi();
 
 
 
